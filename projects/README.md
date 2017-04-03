@@ -1,1 +1,1 @@
-The projects directory should contains your onid folder 
+The projects directory should contain your onid folder 
