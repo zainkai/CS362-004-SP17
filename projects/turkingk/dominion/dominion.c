@@ -645,8 +645,10 @@ int getCost(int cardNumber)
   return -1;
 }
 
-int adventurer_CARD(struct gameState *state,int currentPlayer,int temphand[],int cardDrawn,int drawntreasure,int z){
+int adventurer_CARD(struct gameState *state,int currentPlayer,int temphand[],int cardDrawn,int drawntreasure){
   //note cardDrawn can be a variable in the scope of this funtion.
+
+  int z = 0;
 
   while(drawntreasure<2){
     if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
@@ -655,7 +657,8 @@ int adventurer_CARD(struct gameState *state,int currentPlayer,int temphand[],int
     drawCard(currentPlayer, state);
     cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
     if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
-      drawntreasure++;
+      drawntreasure = 1; // BUG: will cause infinite loop in while loop line:653
+      //drawntreasure++;
     }
     else{
       temphand[z]=cardDrawn;
@@ -673,7 +676,8 @@ int adventurer_CARD(struct gameState *state,int currentPlayer,int temphand[],int
 int smithy_CARD(struct gameState *state,int currentPlayer,int handPos){
   //+3 Cards
   int i;
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 2; i++) // BUG: will only draw 2 cards.
+  //for (i = 0; i < 3; i++)
   {
     drawCard(currentPlayer, state);
   }
@@ -704,13 +708,15 @@ int steward_CARD(struct gameState *state,int currentPlayer,int handPos,int choic
   }
 
   //discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  //discardCard(handPos, currentPlayer, state, 0); // BUG: keeps steward card in players hand forever.
   return 0;
 }
 
+// NOTE: not in drawCardTests may need to place in later.
 int outpost_CARD(struct gameState *state,int currentPlayer,int handPos){
-    //set outpost flag
-  state->outpostPlayed++;
+  //set outpost flag
+  state->outpostPlayed == 0 ? 0 : 1; // BUG: FLAG WILL ALWAYS BE 0
+  //state->outpostPlayed++;
   
   //discard card
   discardCard(handPos, currentPlayer, state, 0);
@@ -749,7 +755,6 @@ int cutpurse_CARD(struct gameState *state,int currentPlayer,int handPos){
   //discard played card from hand
   discardCard(handPos, currentPlayer, state, 0);
 
-
   return 0;
 }
 
@@ -758,7 +763,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 {
   int i;
   int j;
-  int k;
+
+  //int k; /* DEPCRICATED VAR */
+
   int x;
   int index;
   int currentPlayer = whoseTurn(state);
@@ -767,8 +774,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
   int drawntreasure=0;
+
   int cardDrawn;
-  int z = 0;// this is the counter for the temp hand
+  cardDrawn = 0; //causes warning if not initialized.
+
+  //int z = 0;// this is the counter for the temp hand /* DEPCRICATED VAR */
+
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -778,7 +789,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      return adventurer_CARD(state,currentPlayer,temphand,cardDrawn,drawntreasure,z);
+      return adventurer_CARD(state,currentPlayer,temphand,cardDrawn,drawntreasure);
 			
     case council_room:
       //+4 Cards
