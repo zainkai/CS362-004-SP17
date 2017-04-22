@@ -657,8 +657,8 @@ int adventurer_CARD(struct gameState *state,int currentPlayer,int temphand[],int
     drawCard(currentPlayer, state);
     cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
     if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
-      drawntreasure = 1; // BUG: will cause infinite loop in while loop line:653
-      //drawntreasure++;
+      //drawntreasure = 1; // BUG: will cause infinite loop in while loop line:653
+      drawntreasure++;
     }
     else{
       temphand[z]=cardDrawn;
