@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define TESTCARD "adventurer"
+#define TESTCARD "outpost"
 
 int main() {
     int newCards = 0;
@@ -36,46 +36,30 @@ int main() {
 	printf("\nStarting test 1\n\n");
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
-	effect = cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
+	effect = cardEffect(outpost, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	assert(effect == 0);
-	printf("%s returned success of 0\n",TESTCARD);
+	printf("outpost returned success of 0\n");
 
+	//-------------TEST 2--------------
 	printf("Test1 Passed.\n");
 
-	//-------------TEST 2---------------
-
 	printf("\nStarting test 2\n\n");
-	// copy the game state to a test case
-	memcpy(&testG, &G, sizeof(struct gameState));
 	printf("Starting number of cards in hand:%d\n",numHandCards(&testG));
 
-	effect = cardEffect(adventurer, choice1, choice2, choice3, &testG, handpos, &bonus);
 	printf("Current number of cards in hand:%d\n",numHandCards(&testG));
-	printf("Expected number of cards in hand is 7.\n");
+	printf("Expected number of cards in hand is 4.\n");
 
-	assert(numHandCards(&testG) == 7);
+	assert(numHandCards(&testG) == 4);
+
+	//-------------TEST 3--------------
 	printf("Test2 Passed.\n");
 
-	//-------------TEST 3---------------
-	int treasures = 0;
-	int temphand[10] = {0};
-
 	printf("\nStarting test 3\n\n");
+	printf("Expected outpost flag set\n");
 
-	if(testG.hand[0][5]== copper || testG.hand[0][5]== silver || testG.hand[0][5]== gold){
-		treasures += 1;
-	}
-	if(testG.hand[0][6]== copper || testG.hand[0][6]== silver || testG.hand[0][6]== gold){
-		treasures += 1;
-	}
-
-	printf("adventurer drew: %d treasures\n",treasures);
-	printf("test expected 2 treasures drawn.\n");
-
-	assert(treasures == 2);
+	assert(testG.outpostPlayed == 1);
 	printf("Test3 Passed.\n");
-    
 
 	printf("\n >>>>> SUCCESS: Testing complete %s <<<<<\n\n", TESTCARD);
 

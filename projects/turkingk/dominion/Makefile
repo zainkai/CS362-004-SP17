@@ -39,9 +39,19 @@ cardtest1:
 cardtest2:
 	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest2.c rngs.o -o cardtest2 -lm -g
 
+cardtest3:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest3.c rngs.o -o cardtest3 -lm -g
+
+cardtest4:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest4.c rngs.o -o cardtest4 -lm -g
+
+cardtest5:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest5.c rngs.o -o cardtest5 -lm -g
+
+cardtestall: cardtest1 cardtest2 cardtest3 cardtest4 cardtest5
 
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
 	rm -f *.o playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so
-	rm cardtest1
+	rm cardtest1 cardtest2 cardtest3 cardtest4 cardtest5
