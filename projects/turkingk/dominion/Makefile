@@ -1,5 +1,7 @@
 CFLAGS = -Wall -fpic -coverage -lm
 
+all: playdom player testDrawCard testBuyCard badTestDrawCard cardtestall unittestall
+
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
 
@@ -55,9 +57,7 @@ unittest4:
 	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o unittest4.c rngs.o -o unittest4 -lm -g
 unittestall: unittest1 unittest2 unittest3 unittest4
 
-assignment3tests: all cardtestall unittestall
-
-unittestresults: unittest1 unittest2 unittest3 unittest4
+unittestresults.out: unittest1 unittest2 unittest3 unittest4
 	./cardtest1 > unittestresult.out
 	./cardtest2 >> unittestresult.out
 	./cardtest3 >> unittestresult.out
@@ -70,7 +70,6 @@ unittestresults: unittest1 unittest2 unittest3 unittest4
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
-all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
 	rm -f *.o playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so
