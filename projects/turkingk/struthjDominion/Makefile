@@ -24,36 +24,59 @@ testAll: dominion.o testSuite.c
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
-runtests: testDrawCard
+runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
-	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
-
-randomtestcard2: randomtestcard2.c dominion.o rngs.o
-	gcc -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o $(CFLAGS)
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o randomtestadventurer.c rngs.o -o randomtestadventurer -lm -g -fno-stack-protector -fno-stack-protector
 
 randomtestcard1: randomtestcard1.c dominion.o rngs.o
-	gcc -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o $(CFLAGS)
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o randomtestcard1.c rngs.o -o randomtestcard1 -lm -g -fno-stack-protector -fno-stack-protector
 
-randomtestresults: randomtestadventurer randomtestcard1 randomtestcard2
-	./randomtestadventurer &> randomtestadventurer.out
+randomtestcard2: randomtestcard2.c dominion.o rngs.o
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o randomtestcard2.c rngs.o -o randomtestcard2 -lm -g -fno-stack-protector -fno-stack-protector
+
+randomtestall: randomtestadventurer randomtestcard1 randomtestcard2
+
+runrandomtests: randomtestall
+	#randomtestadventurer
+	./randomtestadventurer > randomtestadventurer.out
 	gcov dominion.c >> randomtestadventurer.out
-	cat randomtestadventurer.out
-	./randomtestcard1 >> randomtestcard1.out
+	cat dominion.c.gcov >> randomtestadventurer.out
+	#randomtestcard1
+	./randomtestcard1 > randomtestcard1.out
 	gcov dominion.c >> randomtestcard1.out
-	cat randomtestcard1.out
-	./randomtestcard2 >> randomtestcard2.out
+	cat dominion.c.gcov >> randomtestcard1.out
+	#randomtestcard2
+	./randomtestcard2 > randomtestcard2.out
 	gcov dominion.c >> randomtestcard2.out
-	cat randomtestcard2.out
 	cat dominion.c.gcov >> randomtestcard2.out
+
+cardtest1:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest1.c rngs.o -o cardtest1 -lm -g -DNDEBUG
+cardtest2:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest2.c rngs.o -o cardtest2 -lm -g -DNDEBUG
+cardtest3:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest3.c rngs.o -o cardtest3 -lm -g -DNDEBUG
+cardtest4:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest4.c rngs.o -o cardtest4 -lm -g -DNDEBUG
+cardtest5:
+	gcc -fprofile-arcs -ftest-coverage -Wall -std=c99 dominion.o cardtest5.c rngs.o -o cardtest5 -lm -g -DNDEBUG
+cardtestall: cardtest1 cardtest2 cardtest3 cardtest4 cardtest5
+
+unittestresults.out: cardtest1 cardtest2 cardtest3 cardtest4 cardtest5
+	./cardtest1 > unittestresult.out
+	./cardtest2 >> unittestresult.out
+	./cardtest3 >> unittestresult.out
+	./cardtest4 >> unittestresult.out
+	./cardtest5 >> unittestresult.out
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
-all: playdom player testDrawCard testBuyCard badTestDrawCard
+all: playdom player testDrawCard testBuyCard badTestDrawCard randomtestall
 
 clean:
-	rm -f *.o playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so randomtestadventurer randomtestcard1 randomtestcard2
+	rm -f *.o playdom.exe playdom test.exe test player player.exe testInit testInit.exe *.gcov *.gcda *.gcno *.so

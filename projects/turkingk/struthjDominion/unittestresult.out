@@ -1,0 +1,117 @@
+----------------- Testing Card: smithy ----------------
+
+Starting test 1
+
+smithy returned success of 0
+Test1 Passed.
+
+Starting test 2
+
+Starting number of cards in hand:5
+Current number of cards in hand:8
+Expected number of cards in hand is 7.
+Test2 Passed.
+
+ >>>>> SUCCESS: Testing complete smithy <<<<<
+
+----------------- Testing Card: adventurer ----------------
+
+Starting test 1
+
+adventurer returned success of 0
+Test1 Passed.
+
+Starting test 2
+
+Starting number of cards in hand:5
+Current number of cards in hand:6
+Expected number of cards in hand is 7.
+Test2 Passed.
+
+Starting test 3
+
+adventurer drew: 1 treasures
+test expected 2 treasures drawn.
+Test3 Passed.
+
+ >>>>> SUCCESS: Testing complete adventurer <<<<<
+
+----------------- Testing Card: steward ----------------
+
+Starting test 1
+
+steward returned success of 0
+Test1 Passed.
+
+Starting test 2
+
+Starting number of cards in hand:5
+Current number of cards in hand:6
+Expected number of cards in hand is 6.
+Test2 Passed.
+
+Starting test 3
+
+Starting number of coins in hand:4
+Current number of coins:6
+Expected number of coins 6.
+Test3 Passed.
+
+Starting test 4
+
+Starting number of cards in hand:5
+Current number of cards in hand:2
+Expected number of cards in hand is 2.
+Test4 Passed.
+
+ >>>>> SUCCESS: Testing complete steward <<<<<
+
+----------------- Testing Card: outpost ----------------
+
+Starting test 1
+
+outpost returned success of 0
+Test1 Passed.
+
+Starting test 2
+
+Starting number of cards in hand:4
+Current number of cards in hand:4
+Expected number of cards in hand is 4.
+Test2 Passed.
+
+Starting test 3
+
+Expected outpost flag set
+Test3 Passed.
+
+ >>>>> SUCCESS: Testing complete outpost <<<<<
+
+----------------- Testing Card: embargo ----------------
+
+Starting test 1
+
+embargo returned success of 0
+Test1 Passed.
+
+Starting test 2
+
+Starting number of coins:4
+Current number of coins:6
+Expected number of coins 6.
+Test2 Passed.
+
+Starting test 3
+
+Starting number of embargoTokens:0
+Current number of embargoTokens:1
+Expected number of embargoTokens 1.
+Test3 Passed.
+
+Starting test 4
+
+embargo returned a expected failure of -1
+Test4 Passed.
+
+ >>>>> SUCCESS: Testing complete embargo <<<<<
+

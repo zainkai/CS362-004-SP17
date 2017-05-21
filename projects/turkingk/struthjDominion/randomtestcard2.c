@@ -1,64 +1,70 @@
-#include <assert.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
+#include <string.h>
+#include <stdio.h>
+#include <assert.h>
 #include "rngs.h"
+#include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
-//globals for passes and fails
-int passes = 0;
-int fails = 0;
+#define TESTMAX 50
+#define TESTCARD "outpost"
 
-#define MAX_TESTS 100
+int passing_tests = 0;
 
-void testCard(struct gameState state, int k[]){
-    int  i, j, n, players, player, handCount, deckCount, seed, address;
-    for(i=0;i < MAX_TESTS;i++){
-		seed = rand();
-		players = rand() % 4;
-		initializeGame(players,k,seed,&state);
+/*
+ REFS: betterTestDrawCard.c, cardtest1.c
+*/
 
-		state.deckCount[player] = rand() % MAX_DECK;
-		state.discardCount[player] = rand() % MAX_DECK;
-		state.handCount[player] = rand() % MAX_HAND;
+int main () {
+    srand(time(NULL));
 
-		handCount = state.handCount[player];
-		deckCount = state.deckCount[player];
-        int choice = rand() % 2;
-        int choice1 = rand() % 2;
-        int choice2 = rand() % 2;
-        int currentPlayer = whoseTurn(&state);
-        int currentHandCount = state.handCount[currentPlayer];
-		cardEffect(smithy,choice,choice1,choice2,&state,0,0);
-        int afterHandCount = state.handCount[currentPlayer];
-		if(afterHandCount > currentHandCount){
-            //handcount must be increased
-            passes++;
-		}else {
-            fails++;
-		}
+    int i, j, players_total,choice1,choice2,choice3,cur_player;
 
-	}
+    int test_val_start, test_val_end,test_val_start2,test_val_end2;
 
-}
+    int bonus = 0,handpos = 0;
 
-int main(){
+    int k[10] = {adventurer, council_room, feast, gardens, mine,
+                remodel, smithy, village, baron, great_hall};
+    struct gameState G;
 
-	printf("Testing Smithy!\n");
+    for(i=0;i < TESTMAX;i++){
 
-	int k[10] = {adventurer, gardens, embargo, village, minion, mine, cutpurse,
-	       sea_hag, tribute, smithy};
-	int  i, j, n, players, player, handCount, deckCount, seed, address;
-	struct gameState state1;
-	struct gameState state2;
-	struct gameState state3;
+        players_total = rand() % 4 + 1;
+        // initialize a game state and player cards
+        //initializeGame(numPlayers, k, seed, &G);
+        //memset(&G,0,sizeof(G) -1);
+        initializeGame(players_total, k, rand(), &G);
 
-	testCard(state1, k);
-    testCard(state2, k);
-    testCard(state3, k);
-    printf("Test Passed: %d, Test Failed: %d\n", passes, fails);
+        cur_player = whoseTurn(&G);
 
-	return 0;
+        for(j = 0;j < players_total;j++){
+            G.deckCount[j] = rand() % MAX_DECK +1;
+            G.discardCount[j] = rand() % MAX_DECK +1;
+            G.handCount[j] = rand() % MAX_HAND + 1;
+        }
+
+        choice1 = rand() % 2 + 0;
+        choice2 = rand() % 2 + 0;
+        choice3 = rand() % 2 + 0;
+
+        test_val_start = G.handCount[cur_player];
+        test_val_start2 = G.outpostPlayed;
+        //testing effect
+        cardEffect(outpost,choice1,choice2,choice3,&G,handpos,&bonus);
+        test_val_end = G.handCount[cur_player];
+        test_val_end2 = G.outpostPlayed;
+
+        //great hall is discarded thus start and end values will equal.
+        if(test_val_start -1 == test_val_end && test_val_start2 +1 == test_val_end2){
+            passing_tests++;
+        }
+    }
+
+    /***** End of testing *****/
+    printf("%s tests: %d/%d passed\n",TESTCARD,passing_tests,TESTMAX);
+
+    return 0;
 }
